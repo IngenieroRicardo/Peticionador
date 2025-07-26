@@ -1,0 +1,16 @@
+{
+	"Body": "data=hola&id=1",
+	"Header":[
+		{
+			"Comentario":"",
+			"Nombre":"User-Agent",
+			"Valor":"PeticionadorJSON/1.0"
+		},{
+			"Comentario":"",
+			"Nombre":"Content-Type",
+			"Valor":"application/x-www-form-urlencoded"
+		}
+	],
+	"Method":"POST",
+	"URL":"http://localhost:8080"
+}

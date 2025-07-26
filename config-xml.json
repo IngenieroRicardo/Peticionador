@@ -1,0 +1,16 @@
+{
+	"Body":"<?xml version=\"1.0\"?>\n<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" soap:encodingStyle=\"http://www.w3.org/2003/05/soap-encoding\">\n\t<soap:Header>\n\t\t<data tns:string>dato</data>\n\t</soap:Header>\n\t<soap:Body>\n\t\t<data tns:string>dato</data>\n\t</soap:Body>\n</soap:Envelope> ",
+	"Header":[
+		{
+			"Comentario":"",
+			"Nombre":"SOAPAction",
+			"Valor":"SetData"
+		},{
+			"Comentario":"",
+			"Nombre":"Content-Type",
+			"Valor":"text/xml"
+		}
+	],
+	"Method":"POST",
+	"URL":"https://httpbin.org/delay/5"
+}
