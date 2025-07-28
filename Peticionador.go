@@ -442,3 +442,4 @@ func (rm *RequestManager) Cancel() {
 		rm.cancel()
 	}
 }
+
