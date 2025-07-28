@@ -43,8 +43,55 @@ type RequestManager struct {
 	mu      sync.Mutex
 }
 
+
+// NewRequestManager crea una nueva instancia de RequestManager con configuración obligatoria
+// El parámetro configInput puede ser:
+// 1. Ruta a un archivo JSON (ej: "./config.json")
+// 2. String con el contenido JSON (ej: `{"Method":"GET","URL":"https://api.com"}`)
+func NewRequestManager(configInput string) (*RequestManager, error) {
+    rm := &RequestManager{
+        headers: make(map[string]string),
+        client:  &http.Client{},
+    }
+
+    // Primero verificar si es un archivo existente
+    if fileContent, err := os.ReadFile(configInput); err == nil {
+        // Es un archivo válido, cargar desde el archivo
+        if err := rm.loadConfig(fileContent); err != nil {
+            return nil, fmt.Errorf("error cargando archivo JSON: %v", err)
+        }
+        return rm, nil
+    }
+
+    // Si no es archivo, asumir que es string JSON
+    if err := rm.loadConfig([]byte(configInput)); err != nil {
+        return nil, fmt.Errorf("error cargando string JSON: %v", err)
+    }
+
+    return rm, nil
+}
+
+// loadConfig carga la configuración desde bytes JSON (usado tanto para archivo como string)
+func (rm *RequestManager) loadConfig(jsonData []byte) error {
+    var config Config
+    if err := json.Unmarshal(jsonData, &config); err != nil {
+        return err
+    }
+
+    rm.config = config
+
+    // Inicializar headers
+    for _, h := range config.Header {
+        rm.headers[h.Nombre] = h.Valor
+    }
+
+    // Inicializar body
+    rm.body = config.Body
+
+    return nil
+}
 // NewRequestManager crea una nueva instancia de RequestManager
-func NewRequestManager() *RequestManager {
+/*func NewRequestManager() *RequestManager {
 	return &RequestManager{
 		headers: make(map[string]string),
 		client:  &http.Client{},
@@ -75,7 +122,7 @@ func (rm *RequestManager) LoadJSON(archivo string) error {
 	rm.body = config.Body
 
 	return nil
-}
+}*/
 
 // SetHeader establece o modifica un header
 func (rm *RequestManager) SetHeader(nombre, valor string) {

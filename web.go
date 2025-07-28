@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -29,6 +30,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(string(body))
 	}
 
+	time.Sleep(5 * time.Second)	
+
 	// Responder al cliente
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Datos recibidos. Ver consola."))
@@ -38,7 +41,7 @@ func main() {
 	http.HandleFunc("/", handler)
 
 	fmt.Println("Servidor escuchando en http://localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":5000", nil)
 	if err != nil {
 		log.Fatal("Error al iniciar el servidor:", err)
 	}

@@ -6,54 +6,50 @@ import (
 	"Peticionador/Peticionador" // Asumiendo que el paquete está en esta ruta
 )
 
+var (
+	manager   *Peticionador.RequestManager
+	err       error
+)
+
+
 func main() {
+	manager.SetHeader("Authorization", "Bearer token123")
 
-		rm := Peticionador.NewRequestManager()
-
-		// Cargar configuración desde JSON
-		err := rm.LoadJSON("config.json")
+	manager.SetBody("data", "Golang Peticionador")
+	manager.SetBody("nuevoCampo", "valor")
+	manager.SetBody("erreglado.0", 100)
+	
+	go func() {
+		err := manager.Response(respuesta)
+		
 		if err != nil {
-			fmt.Println("Error al cargar JSON:", err)
-			return
+			fmt.Println("Error:", err)
 		}
+	}()
+	
+	// Esperar 1 segundo y luego cancelar
+	//cancelar()
 
-	
-		// Configurar endpoint con delay suficiente para cancelar
-		// Modificar un header si es necesario
-		rm.SetHeader("Authorization", "Bearer token123")
-	
-		// Modificar el body si es necesario
-		rm.SetBody("data", "Golang Peticionador")
-		rm.SetBody("nuevoCampo", "valor")
-		rm.SetBody("erreglado.0", 100)
-		
-		// Variable para verificar si la petición terminó
-		var completed bool
-	
-		go func() {
-			err := rm.Response(func(body string, status int) {
-				completed = true
-				fmt.Printf("Status: %d\n", status)
-				fmt.Printf("Response: %s\n", body)
-			})
-			
-			if err != nil {
-				fmt.Println("Error:", err)
-				completed = true
-			}
-		}()
-	
-		// Esperar 1 segundo y luego cancelar
-		time.Sleep(1 * time.Second)
-		rm.Cancel()
-		fmt.Println("Petición cancelada")
-	
-		// Esperar un tiempo suficiente para ver el resultado
-		time.Sleep(4 * time.Second)
-		
-		if !completed {
-			fmt.Println("La petición fue cancelada antes de completarse")
-		}
 
-		time.Sleep(8 * time.Second)
+	// Esperar 8 segundo y cerrar
+	time.Sleep(8 * time.Second)	
+}
+
+
+func init() {
+	manager, err = Peticionador.NewRequestManager("./config.json")
+	if err != nil {
+		panic(err)
+	}
+}
+
+func respuesta(body string, status int) {
+	fmt.Printf("Status: %d\n", status)
+	fmt.Printf("Response: %s\n", body)
+}
+
+func cancelar() {
+	time.Sleep(1 * time.Second)
+	manager.Cancel()
+	fmt.Println("Petición cancelada")
 }
