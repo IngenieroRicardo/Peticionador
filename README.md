@@ -72,7 +72,7 @@ package main
 
 import (
 	"fmt"
-	"Peticionador/Peticionador"
+	"github.com/IngenieroRicardo/Peticionador"
 )
 
 func main() {
