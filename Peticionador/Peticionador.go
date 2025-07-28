@@ -90,39 +90,7 @@ func (rm *RequestManager) loadConfig(jsonData []byte) error {
 
     return nil
 }
-// NewRequestManager crea una nueva instancia de RequestManager
-/*func NewRequestManager() *RequestManager {
-	return &RequestManager{
-		headers: make(map[string]string),
-		client:  &http.Client{},
-	}
-}
 
-// LoadJSON carga la configuración desde un archivo JSON
-func (rm *RequestManager) LoadJSON(archivo string) error {
-	file, err := os.ReadFile(archivo)
-	if err != nil {
-		return err
-	}
-
-	var config Config
-	err = json.Unmarshal(file, &config)
-	if err != nil {
-		return err
-	}
-
-	rm.config = config
-
-	// Inicializar headers
-	for _, h := range config.Header {
-		rm.headers[h.Nombre] = h.Valor
-	}
-
-	// Inicializar body
-	rm.body = config.Body
-
-	return nil
-}*/
 
 // SetHeader establece o modifica un header
 func (rm *RequestManager) SetHeader(nombre, valor string) {
