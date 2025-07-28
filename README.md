@@ -61,3 +61,52 @@ func main() {
 	}
 }
 ```
+
+
+
+
+
+
+```golang
+package main
+
+import (
+	"fmt"
+	"Peticionador/Peticionador"
+)
+
+func main() {
+
+	manager, _ := Peticionador.NewRequestManager(`{
+	"Body": {
+		"data":"Hola mundo",
+		"id":101,
+		"erreglado": [ 1,2,3 ]
+	},
+	"Header":[
+		{
+			"Comentario":"",
+			"Nombre":"User-Agent",
+			"Valor":"PeticionadorJSON/1.0"
+		},{
+			"Comentario":"",
+			"Nombre":"Content-Type",
+			"Valor":"application/json"
+		}
+	],
+	"Method":"POST",
+	"URL":"https://httpbin.org/delay/5"
+}`	)
+
+
+	manager.SetHeader("Authorization", "Bearer token123")
+
+	manager.SetBody("modificaCampo", "Golang Peticionador")
+	manager.SetBody("nuevoCampo", "valor")
+	manager.SetBody("erreglo.0", 100)
+	
+	body, status := manager.Response()
+
+	fmt.Println("Estado: ",status,"Cuerpo:",body)
+}
+```
