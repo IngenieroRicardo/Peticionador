@@ -57,7 +57,7 @@ func main() {
 				fmt.Println(resultado.response)
 			}
 		case <-time.After(3 * time.Second): 
-			cancelar()
+			cancelar() //Cancelar la peticion despues de 3 segundos
 	}
 }
 ```
