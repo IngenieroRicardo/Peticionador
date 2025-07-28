@@ -1,6 +1,3 @@
-# Peticionador
-Libreria basada en los archivos de https://gitlab.com/RicardoValladares/json
-
 ### Usar JSON en ves del archivo, para mayor portabilidad:
 ```golang
 package main
