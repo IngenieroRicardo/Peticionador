@@ -10,11 +10,8 @@ import (
 func main() {
 
 	manager, _ := Peticionador.NewRequestManager(`{
-	"Body": {
-		"modificaCampo":"Hola mundo",
-		"id":101,
-		"erreglo": [ 1,2,3 ]
-	},
+	"Method":"POST",
+	"URL":"https://httpbin.org/delay/5",
 	"Header":[
 		{
 			"Comentario":"",
@@ -26,8 +23,11 @@ func main() {
 			"Valor":"application/json"
 		}
 	],
-	"Method":"POST",
-	"URL":"https://httpbin.org/delay/5"
+	"Body": {
+		"modificaCampo":"Hola mundo",
+		"id":101,
+		"erreglo": [ 1,2,3 ]
+	}
 }`	)
 
 
