@@ -79,9 +79,9 @@ func main() {
 
 	manager, _ := Peticionador.NewRequestManager(`{
 	"Body": {
-		"data":"Hola mundo",
+		"modificaCampo":"Hola mundo",
 		"id":101,
-		"erreglado": [ 1,2,3 ]
+		"erreglo": [ 1,2,3 ]
 	},
 	"Header":[
 		{
