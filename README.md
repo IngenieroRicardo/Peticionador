@@ -67,7 +67,9 @@ func main() {
 }
 
 func repuesta(body string, status int) {
-    fmt.Println("Estado:", status, "Cuerpo:", body)
+    if status != 0 {
+        fmt.Println("Estado:", status, "Cuerpo:", body)
+    }
 }
 
 ```
