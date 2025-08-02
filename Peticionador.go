@@ -384,7 +384,7 @@ func (rm *RequestManager) prepareRequestBody() (io.Reader, string, error) {
 
 
 // Response realiza la petición HTTP y llama al callback con la respuesta
-func (rm *RequestManager) Response() (string, int) {
+func (rm *RequestManager) Response(callback ...func(string, int)) (string, int) {
     rm.mu.Lock()
     rm.ctx, rm.cancel = context.WithCancel(context.Background())
     rm.mu.Unlock()
@@ -392,6 +392,10 @@ func (rm *RequestManager) Response() (string, int) {
     // Preparar el cuerpo de la petición
     bodyReader, contentType, err := rm.prepareRequestBody()
     if err != nil {
+        if len(callback) > 0 {
+            callback[0](err.Error(), 0)
+            return "", 0
+        }
         return err.Error(), 0
     }
 
@@ -407,6 +411,10 @@ func (rm *RequestManager) Response() (string, int) {
         bodyReader,
     )
     if err != nil {
+        if len(callback) > 0 {
+            callback[0](err.Error(), 0)
+            return "", 0
+        }
         return err.Error(), 0
     }
 
@@ -418,7 +426,15 @@ func (rm *RequestManager) Response() (string, int) {
     resp, err := rm.client.Do(req)
     if err != nil {
         if rm.ctx.Err() == context.Canceled {
+            if len(callback) > 0 {
+                callback[0]("request canceled", 0)
+                return "", 0
+            }
             return "request canceled", 0
+        }
+        if len(callback) > 0 {
+            callback[0](err.Error(), 0)
+            return "", 0
         }
         return err.Error(), 0
     }
@@ -426,12 +442,24 @@ func (rm *RequestManager) Response() (string, int) {
 
     responseBody, err := io.ReadAll(resp.Body)
     if err != nil {
+        if len(callback) > 0 {
+            callback[0](err.Error(), 0)
+            return "", 0
+        }
         return err.Error(), 0
     }
 
-    return string(responseBody), resp.StatusCode
+    responseStr := string(responseBody)
+    
+    // Si hay callback, llamarlo
+    if len(callback) > 0 {
+        callback[0](responseStr, resp.StatusCode)
+        return responseStr, resp.StatusCode
+    }
+    
+    // Retorno normal
+    return responseStr, resp.StatusCode
 }
-
 
 // Cancel cancela la petición HTTP en curso
 func (rm *RequestManager) Cancel() {
@@ -442,4 +470,3 @@ func (rm *RequestManager) Cancel() {
 		rm.cancel()
 	}
 }
-
