@@ -43,8 +43,38 @@ func main() {
 }
 ```
 
+### Hacer una peticion cancelable, modo 1:
+```golang
+package main
 
-### Hacer una peticion cancelable:
+import (
+	"fmt"
+	"time"
+	"github.com/IngenieroRicardo/Peticionador"
+)
+
+func main() {
+
+  	manager, err := Peticionador.NewRequestManager("./config.json")
+ 	if err != nil {
+ 		panic(err)
+ 	}
+ 	go manager.Response(repuesta)
+
+ 	time.Sleep(1* time.Second)
+ 	manager.Cancel()
+ 	time.Sleep(5* time.Second)
+}
+
+func repuesta(body string, status int) {
+    fmt.Println("Estado:", status, "Cuerpo:", body)
+}
+
+```
+
+
+
+### Hacer una peticion cancelable, modo 2:
 ```golang
 package main
 
